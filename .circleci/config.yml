@@ -84,10 +84,7 @@ commands:
                   name: Nuget package
                   command: |
                       dotnet pack --p:PackageOutputPath=./nuget --include-source -p:SymbolPackageFormat=snupkg <<#parameters.is-release>>-c Release -p:IsRelease=True<</parameters.is-release>>
-                      dotnet pack --framework net6.0 --p:PackageOutputPath=./nuget --include-source -p:SymbolPackageFormat=snupkg <<#parameters.is-release>>-c Release -p:IsRelease=True<</parameters.is-release>>
-                      dotnet pack --framework net7.0 --p:PackageOutputPath=./nuget --include-source -p:SymbolPackageFormat=snupkg <<#parameters.is-release>>-c Release -p:IsRelease=True<</parameters.is-release>>
-                      dotnet pack --framework netstandard2.1 --p:PackageOutputPath=./nuget --include-source -p:SymbolPackageFormat=snupkg <<#parameters.is-release>>-c Release -p:IsRelease=True<</parameters.is-release>>
-
+                      dotnet pack --p:PackageOutputPath=./nuget --include-source -p:SymbolPackageFormat=snupkg <<#parameters.is-release>>-c Release -p:IsRelease=True<</parameters.is-release>>
             - run:
                   working-directory: <<parameters.working-dir>>
                   name: Package push
