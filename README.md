@@ -17,15 +17,17 @@ Install plugin from NuGet into your SpecFlow project.
 PM> Install-Package NativeWaves.SpecFlow.AutofacServiceProvider
 ```
 
-Create a static method in your SpecFlow project that returns a `Microsoft.Extensions.DependencyInjection.IServiceCollection` and tag it with the `[RootDependencies]` attribute. 
-Configure your root dependencies within this method, which will be available for all Features/Scenarios.
-Each step definition can implement a static public method tagged with a `[BeforeFeature]` or `[BeforeScenario]` attribute, that has a `IServiceCollection` as its parameter. In this 
-service-collection you can register services which which take effect on a feature or scenario level. A `IServiceProvider` created for a `ScenarioContext` has access to all registrations inside the `[RootDependencies]` or services registered inside the `IServiceCollection`. Objects obey the lifetime-scope of autofac. Singletons life in the `Root-Scope`, Scoped services on a FeatureLevel inside the `Feature-Scope`, and all other scoped or transient services on a scenario-level inside the `Scenario-Scope`.
-After a Scenario has finished, all object created for the scenario will be disposed. After a feature ended, all objects scoped to the feature will be disposed. After the test-run, all other services/singletons will be disposed.
+Create a static method in your SpecFlow project flagged with the `[RootDependencies]` attribute, which should return an instance of `Microsoft.Extensions.DependencyInjection.IServiceCollection`. Within this method, you'll configure your root dependencies, making them accessible to all Features and Scenarios.
 
-Step definition classes (i.e. classes with the SpecFlow `[Binding]` attribute) are automatically added to the service collection.
+For each step definition, you can define a static public method tagged with either `[BeforeFeature]` or `[BeforeScenario]` which takes an `IServiceCollection` as a parameter. Within this service collection, you can register services that will impact the DI on a scenario level.
 
-A typical dependency builder method looks like this:
+The IServiceProvider created for a ScenarioContext will have access to all the registrations made within the `[RootDependencies]`` or any services registered within the `IServiceCollection``. Objects adhere to the lifetime scope defined by Autofac, with Singletons residing in the Root Scope, Scoped services at the Feature Level within the Feature Scope, and all other Scoped or Transient services at the Scenario Level within the Scenario Scope.
+
+Once a Scenario finishes, all objects created in the scenario life-time-scope will be disposed. Similarly, after a feature ends, all objects scoped to the feature life-time-scope will be disposed. Eventually all other services and singletons will be disposed after the test run.
+
+All Step definition classes, marked with the SpecFlow `[Binding]` attribute, are automatically imported into the root service collection.
+
+A typical dependency builder method is structured as follows:
 
 ```csharp
 [RootDependencies]
