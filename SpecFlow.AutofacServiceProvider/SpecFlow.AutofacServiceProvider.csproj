@@ -27,8 +27,9 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <DebugType>full</DebugType>
-
-    <PackageProjectUrl>https://nuget.pkg.github.com/nativewaves/SpecFlow.AutofacServiceProvider</PackageProjectUrl>
+    
+    <ProjectUrl>https://github.com/nativewaves/SpecFlow.AutofacServiceProvider</ProjectUrl>
+    <RepositoryUrl>https://github.com/nativewaves/nw-platform-packages.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

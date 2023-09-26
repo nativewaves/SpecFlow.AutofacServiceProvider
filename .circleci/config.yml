@@ -78,18 +78,21 @@ commands:
                 type: string
             is-release:
                 type: boolean
+            package-url:
+                type: string
+                default: https://nuget.pkg.github.com/nativewaves
         steps:
             - run:
                   working-directory: <<parameters.working-dir>>
                   name: Nuget package
                   command: |
-                      dotnet pack --p:PackageOutputPath=./nuget --include-source -p:SymbolPackageFormat=snupkg <<#parameters.is-release>>-c Release -p:IsRelease=True<</parameters.is-release>>
-                      dotnet pack --p:PackageOutputPath=./nuget --include-source -p:SymbolPackageFormat=snupkg <<#parameters.is-release>>-c Release -p:IsRelease=True<</parameters.is-release>>
+                      dotnet pack --p:PackageOutputPath=./nuget --include-source -p:SymbolPackageFormat=snupkg <<#parameters.is-release>>-c Release<</parameters.is-release>>
+                      dotnet pack --p:PackageOutputPath=./nuget --include-source -p:SymbolPackageFormat=snupkg <<#parameters.is-release>>-c Release<</parameters.is-release>>
             - run:
                   working-directory: <<parameters.working-dir>>
                   name: Package push
                   command: |
-                      dotnet nuget push $(find . -iname *.nupkg | xargs) -s https://nuget.pkg.github.com/nativewaves -k $GITHUB_TOKEN --skip-duplicate
+                      dotnet nuget push $(find . -iname *.nupkg | xargs) -s <<parameters.package-url>> -k $GITHUB_TOKEN --skip-duplicate
 
 jobs:
     build-and-deploy-nuget:
