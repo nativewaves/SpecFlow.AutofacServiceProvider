@@ -31,7 +31,11 @@ namespace NativeWaves.SpecFlow.AutofacServiceProvider
         private static readonly ConcurrentDictionary<ISpecFlowContext, ILifetimeScope> ActiveServiceScopes = new ConcurrentDictionary<ISpecFlowContext, ILifetimeScope>();
         private readonly object _registrationLock = new object();
 
-        public void Initialize(RuntimePluginEvents runtimePluginEvents, RuntimePluginParameters runtimePluginParameters, UnitTestProviderConfiguration unitTestProviderConfiguration)
+        public void Initialize(
+            RuntimePluginEvents runtimePluginEvents,
+            RuntimePluginParameters runtimePluginParameters,
+            UnitTestProviderConfiguration unitTestProviderConfiguration
+            )
         {
             runtimePluginEvents.CustomizeGlobalDependencies += CustomizeGlobalDependencies;
             runtimePluginEvents.CustomizeFeatureDependencies += CustomizeFeatureDependenciesEventHandler;
@@ -49,7 +53,7 @@ namespace NativeWaves.SpecFlow.AutofacServiceProvider
                         args.ObjectContainer.RegisterTypeAs<DependencyInjectionTestObjectResolver, ITestObjectResolver>();
                         args.ObjectContainer.RegisterTypeAs<ServiceCollectionFinder, IServiceCollectionFinder>();
                     }
-
+                    
                     // We store the (MS) service provider in the global (BoDi) container, we create it only once.
                     // It must be lazy (hence factory) because at this point we still don't have the bindings mapped.
                     args.ObjectContainer.RegisterFactoryAs(c =>
@@ -80,6 +84,7 @@ namespace NativeWaves.SpecFlow.AutofacServiceProvider
                 args.ObjectContainer.Resolve<IServiceCollectionFinder>();
             }
         }
+
         static void PrintRegisteredServiceInfo(IObjectContainer c)
         {
             var services = c.Resolve<IServiceCollection>();
@@ -92,14 +97,17 @@ namespace NativeWaves.SpecFlow.AutofacServiceProvider
         private static void CustomizeFeatureDependenciesEventHandler(object sender, CustomizeFeatureDependenciesEventArgs args)
         {
             // container gets it's own set of services to register
-            args.ObjectContainer.RegisterInstanceAs<IServiceCollection>(new ServiceCollection());
+            var services = new ServiceCollection();
+            args.ObjectContainer.RegisterInstanceAs<IServiceCollection>(services);
 
             args.ObjectContainer.RegisterFactoryAs<IServiceProvider>(c =>
             {
                 var rootAutofacContainer = c.Resolve<IContainer>();
-                var services = c.Resolve<IServiceCollection>();
                 var scope = rootAutofacContainer.BeginLifetimeScope(FeatureScopeTag, x => x.Populate(services));
                 c.RegisterInstanceAs(scope);
+
+                // if there are registrations happening after SP resolution, flag them
+                services.MakeReadOnly();
 
                 var serviceProvider = new Autofac.Extensions.DependencyInjection.AutofacServiceProvider(scope);
                 BindMappings.TryAdd(scope, args.ObjectContainer.Resolve<IContextManager>());
@@ -121,7 +129,8 @@ namespace NativeWaves.SpecFlow.AutofacServiceProvider
         private static void CustomizeScenarioDependenciesEventHandler(object sender, CustomizeScenarioDependenciesEventArgs args)
         {
             // container gets it's own set of services to register
-            args.ObjectContainer.RegisterInstanceAs<IServiceCollection>(new ServiceCollection());
+            var services = new ServiceCollection();
+            args.ObjectContainer.RegisterInstanceAs<IServiceCollection>(services);
 
             args.ObjectContainer.RegisterFactoryAs<IServiceProvider>(c =>
             {
@@ -129,9 +138,11 @@ namespace NativeWaves.SpecFlow.AutofacServiceProvider
                     .FeatureContainer
                     .Resolve<IServiceProvider>()
                     .GetRequiredService<ILifetimeScope>();
-                var services = c.Resolve<IServiceCollection>();
                 var scope = rootAutofacContainer.BeginLifetimeScope(ScenarioScopeTag, x => x.Populate(services));
                 c.RegisterInstanceAs(scope);
+
+                // if there are registrations happening after SP resolution, flag them
+                services.MakeReadOnly();
 
                 var serviceProvider = new Autofac.Extensions.DependencyInjection.AutofacServiceProvider(scope);
                 BindMappings.TryAdd(scope, args.ObjectContainer.Resolve<IContextManager>());
@@ -192,9 +203,11 @@ namespace NativeWaves.SpecFlow.AutofacServiceProvider
             });
 
             services.AddTransient(sp => BindMappings[sp.GetRequiredService<ILifetimeScope>()]);
-            services.AddTransient(sp => BindMappings[sp.GetRequiredService<ILifetimeScope>()].TestThreadContext);
             services.AddTransient(sp => BindMappings[sp.GetRequiredService<ILifetimeScope>()].FeatureContext);
+            services.AddTransient<IFeatureContext>(sp => BindMappings[sp.GetRequiredService<ILifetimeScope>()].FeatureContext);
             services.AddTransient(sp => BindMappings[sp.GetRequiredService<ILifetimeScope>()].ScenarioContext);
+            services.AddTransient<IScenarioContext>(sp => BindMappings[sp.GetRequiredService<ILifetimeScope>()].ScenarioContext);
+            services.AddTransient(sp => BindMappings[sp.GetRequiredService<ILifetimeScope>()].TestThreadContext);
             services.AddTransient(sp => BindMappings[sp.GetRequiredService<ILifetimeScope>()].TestThreadContext.TestThreadContainer.Resolve<ITestRunner>());
             services.AddTransient(sp => BindMappings[sp.GetRequiredService<ILifetimeScope>()].TestThreadContext.TestThreadContainer.Resolve<ITestExecutionEngine>());
             services.AddTransient(sp => BindMappings[sp.GetRequiredService<ILifetimeScope>()].TestThreadContext.TestThreadContainer.Resolve<IStepArgumentTypeConverter>());
