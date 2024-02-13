@@ -1,4 +1,4 @@
-﻿using Autofac.Core;
+using Autofac.Core;
 using BoDi;
 using Microsoft.Extensions.DependencyInjection;
 using System;
