@@ -1,4 +1,5 @@
-﻿using BoDi;
+using Autofac.Core;
+using BoDi;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
@@ -30,25 +31,11 @@ namespace NativeWaves.SpecFlow.AutofacServiceProvider
         {
             // Can remove if IsRegistered(Type type) exists
             var methodInfo = IsRegisteredMethodInfoCache.GetOrAdd(bindingType, CreateGenericMethodInfo);
-            var registered = (bool)methodInfo.Invoke(this, new object[] { container });
-            // var registered = container.IsRegistered(bindingType);
+            var bodiRegistered = (bool)methodInfo.Invoke(this, new object[] { container });
 
-            try
-            {
-                return registered
-                    ? container.Resolve(bindingType)
-                    : container.Resolve<IServiceProvider>().GetRequiredService(bindingType);
-            }
-            catch
-            {
-                // if it's a concrete type but not registered within the serviceprovider
-                // we pass it to the object-container as it might be able to construct it
-                if (IsConcreteType(bindingType))
-                {
-                    return container.Resolve(bindingType);
-                }
-                throw; // unregistered abstract type throws
-            }
+            return bodiRegistered
+                ? container.Resolve(bindingType)
+                : container.Resolve<IServiceProvider>().GetRequiredService(bindingType);
         }
 
         public bool IsRegistered<T>(IObjectContainer container)
