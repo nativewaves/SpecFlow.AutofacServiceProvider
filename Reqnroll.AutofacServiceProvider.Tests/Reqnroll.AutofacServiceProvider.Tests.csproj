@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <IsPublishable>false</IsPublishable>
+    <IsPackable>false</IsPackable>
+    <Product>NativeWaves.Reqnroll.AutofacServiceProvider</Product>
+    <RootNamespace>NativeWaves.Reqnroll.AutofacServiceProvider.Tests</RootNamespace>
+    <AssemblyName>NativeWaves.Reqnroll.AutofacServiceProvider.Tests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Reqnroll.xUnit" Version="3.1.2" />
+    <!--<PackageReference Include="SpecRun.Reqnroll" Version="[3.9.31]" />-->
+    <!-- i don't know why we need nunit on the server?!??! -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.14.1]" />
+    <PackageReference Include="xunit" Version="[2.9.3]" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="[6.8.0]" PrivateAssets="all" />
+    <PackageReference Include="coverlet.collector" Version="[3.2.0]" PrivateAssets="all" />
+    <PackageReference Include="GitVersion.MsBuild" Version="[5.11.1]" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Reqnroll.AutofacServiceProvider\Reqnroll.AutofacServiceProvider.csproj" />
+  </ItemGroup>
+
+</Project>

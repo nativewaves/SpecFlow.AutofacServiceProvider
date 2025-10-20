@@ -125,8 +125,8 @@ workflows:
                 - equal: [master, <<pipeline.git.branch>>]
         jobs:
             - build-and-deploy-nuget:
-                  working-dir: SpecFlow.DependencyInjection
-                  unittest-dir: SpecFlow.DependencyInjection.Tests
+                  working-dir: Reqnroll.DependencyInjection
+                  unittest-dir: Reqnroll.DependencyInjection.Tests
                   is-release: true
     dev-build-and-deploy:
         when:
@@ -134,5 +134,5 @@ workflows:
                 equal: [master, <<pipeline.git.branch>>]
         jobs:
             - build-and-deploy-nuget:
-                  working-dir: SpecFlow.DependencyInjection
-                  unittest-dir: SpecFlow.DependencyInjection.Tests
+                  working-dir: Reqnroll.DependencyInjection
+                  unittest-dir: Reqnroll.DependencyInjection.Tests

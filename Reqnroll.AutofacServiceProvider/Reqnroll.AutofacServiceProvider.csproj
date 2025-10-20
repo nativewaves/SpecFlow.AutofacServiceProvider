@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0;net8.0</TargetFrameworks>
+    <Product>NativeWaves.Reqnroll.AutofacServiceProvider</Product>
+    <PackageId>NativeWaves.Reqnroll.AutofacServiceProvider</PackageId>
+    <RootNamespace>NativeWaves.Reqnroll.AutofacServiceProvider</RootNamespace>
+    <AssemblyName>NativeWaves.Reqnroll.AutofacServiceProvider.ReqnrollPlugin</AssemblyName>
+    <Description>
+      Reqnroll plugin that enables to use Autofac.Extensions.DependencyInjection for resolving test dependencies.
+      The ServiceCollection can be extended using the Reqnroll scenario-hooks. AutoFac is used for the
+      ServiceProvider implementation and the object lifecycle handling.
+    </Description>
+
+    <Authors>Solid Token, NativeWaves</Authors>
+    <Company>Solid Token, NativeWaves</Company>
+    <Copyright>Copyright © Solid Token</Copyright>
+    <PackageIcon>assets/icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageTags>microsoft;dependencyinjection;di;Reqnroll;plugin;serviceprovider</PackageTags>
+    <CurrentYear>$([System.DateTime]::Today.Year)</CurrentYear>
+
+    <AllowedOutputExtensionsInPackageBuildOutputFolder Condition="'$(Configuration)'=='Debug'">.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>full</DebugType>
+    
+    <ProjectUrl>https://github.com/nativewaves/Reqnroll.AutofacServiceProvider</ProjectUrl>
+    <RepositoryUrl>https://github.com/nativewaves/nw-platform-packages.git</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" Visible="false" PackagePath="" />
+    <None Include="../LICENSE" Pack="true" Visible="false" PackagePath="" />
+    <None Include="assets/icon.png" Pack="true" Visible="true" PackagePath="assets/" />
+    <None Include="build/*" Pack="true" Visible="true" PackagePath="build/" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Reqnroll" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="[1.1.1]">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="GitVersion.MsBuild" Version="[5.11.1]">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

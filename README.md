@@ -1,23 +1,23 @@
-# SpecFlow.DependencyInjection
+# Reqnroll.DependencyInjection
 
-SpecFlow plugin that enables to use Autofac.Extensions.DependencyInjection for resolving test dependencies.
-The ServiceCollection can be extended using the SpecFlow scenario-hooks. AutoFac is used for the IServiceProvider implementation and the object lifecycle handling.
+Reqnroll plugin that enables to use Autofac.Extensions.DependencyInjection for resolving test dependencies.
+The ServiceCollection can be extended using the Reqnroll scenario-hooks. AutoFac is used for the IServiceProvider implementation and the object lifecycle handling.
 
 Currently supports:
-* [SpecFlow v3.9.74](https://www.nuget.org/packages/SpecFlow/3.9.74) or above
+* [Reqnroll v3.9.74](https://www.nuget.org/packages/Reqnroll/3.9.74) or above
 * [Microsoft.Extensions.DependencyInjection v7.0.0](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/7.0.0) or above
 
 Based on [Autofac.Extensions.DependencyInjection](https://www.nuget.org/packages/Autofac.Extensions.DependencyInjection).
 
 ## Usage
 
-Install plugin from NuGet into your SpecFlow project.
+Install plugin from NuGet into your Reqnroll project.
 
 ```powershell
-PM> Install-Package NativeWaves.SpecFlow.AutofacServiceProvider
+PM> Install-Package NativeWaves.Reqnroll.AutofacServiceProvider
 ```
 
-Create a static method in your SpecFlow project flagged with the `[RootDependencies]` attribute, which should return an instance of `Microsoft.Extensions.DependencyInjection.IServiceCollection`. Within this method, you'll configure your root dependencies, making them accessible to all Features and Scenarios.
+Create a static method in your Reqnroll project flagged with the `[RootDependencies]` attribute, which should return an instance of `Microsoft.Extensions.DependencyInjection.IServiceCollection`. Within this method, you'll configure your root dependencies, making them accessible to all Features and Scenarios.
 
 For each step definition, you can define a static public method tagged with either `[BeforeFeature]` or `[BeforeScenario]` which takes an `IServiceCollection` as a parameter. Within this service collection, you can register services that will impact the DI on a scenario level.
 
@@ -25,7 +25,7 @@ The IServiceProvider created for a ScenarioContext will have access to all the r
 
 Once a Scenario finishes, all objects created in the scenario life-time-scope will be disposed. Similarly, after a feature ends, all objects scoped to the feature life-time-scope will be disposed. Eventually all other services and singletons will be disposed after the test run.
 
-All Step definition classes, marked with the SpecFlow `[Binding]` attribute, are automatically imported into the root service collection.
+All Step definition classes, marked with the Reqnroll `[Binding]` attribute, are automatically imported into the root service collection.
 
 A typical dependency builder method is structured as follows:
 
