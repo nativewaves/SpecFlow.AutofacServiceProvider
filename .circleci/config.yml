@@ -67,8 +67,8 @@ commands:
                   no_output_timeout: <<parameters.no_output_timeout>>
                   command: |
                       echo working dir: $(pwd)
-                      dotnet publish . --framework net6.0 -c Release -p:PublishDir=./build/publish --runtime <<parameters.runtime>> --no-self-contained
                       dotnet publish . --framework net7.0 -c Release -p:PublishDir=./build/publish --runtime <<parameters.runtime>> --no-self-contained
+                      dotnet publish . --framework net8.0 -c Release -p:PublishDir=./build/publish --runtime <<parameters.runtime>> --no-self-contained
                       dotnet publish . --framework netstandard2.1 -c Release -p:PublishDir=./build/publish --runtime <<parameters.runtime>> --no-self-contained
             - dotnet_test:
                   working-dir: <<#parameters.unittest-dir>><<parameters.unittest-dir>><</parameters.unittest-dir>><<^parameters.unittest-dir>><<parameters.working-dir>><</parameters.unittest-dir>>
@@ -125,8 +125,8 @@ workflows:
                 - equal: [master, <<pipeline.git.branch>>]
         jobs:
             - build-and-deploy-nuget:
-                  working-dir: SpecFlow.DependencyInjection
-                  unittest-dir: SpecFlow.DependencyInjection.Tests
+                  working-dir: Reqnroll.DependencyInjection
+                  unittest-dir: Reqnroll.DependencyInjection.Tests
                   is-release: true
     dev-build-and-deploy:
         when:
@@ -134,5 +134,5 @@ workflows:
                 equal: [master, <<pipeline.git.branch>>]
         jobs:
             - build-and-deploy-nuget:
-                  working-dir: SpecFlow.DependencyInjection
-                  unittest-dir: SpecFlow.DependencyInjection.Tests
+                  working-dir: Reqnroll.DependencyInjection
+                  unittest-dir: Reqnroll.DependencyInjection.Tests
